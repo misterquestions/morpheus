@@ -8,18 +8,41 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class WorldSleepState {
-    private int dimension;
-    private HashMap<String, Boolean> playerStatus;
+    private final int dimension;
+    private final HashMap<String, Boolean> playerStatus;
 
     public WorldSleepState(int dimension) {
         this.dimension = dimension;
         this.playerStatus = new HashMap<>();
     }
 
+    public void setPlayerAwake(String username) {
+        this.playerStatus.put(username, false);
+    }
+
+    public void removePlayer(String username) {
+        this.playerStatus.remove(username);
+    }
+
+    public boolean isPlayerSleeping(String username) {
+        if (this.playerStatus.containsKey(username)) {
+            return this.playerStatus.get(username);
+        }
+
+        this.playerStatus.put(username, false);
+        return false;
+    }
+
+    public void setPlayerAsleep(String username) {
+        this.playerStatus.put(username, true);
+    }
+
     public int getPercentSleeping() {
-        return (this.playerStatus.size() - this.getMiningPlayers() > 0) ?
+        int requiredPlayerCount = playerStatus.size() - getMiningPlayers() - getIgnoredPlayers();
+
+        return (requiredPlayerCount> 0) ?
                 (this.getSleepingPlayers() > 0)
-                        ? (this.getSleepingPlayers() * 100) / (this.playerStatus.size() - this.getMiningPlayers())
+                        ? (this.getSleepingPlayers() * 100) / requiredPlayerCount
                         : 0
                 : 100;
     }
@@ -36,6 +59,18 @@ public class WorldSleepState {
         return !Morpheus.includeMiners ? miningPlayers : 0;
     }
 
+    private int getIgnoredPlayers() {
+        int ignoredPlayers = 0;
+
+        for (EntityPlayer player : FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(this.dimension).playerEntities) {
+            if (player.canUseCommand(2, "") || player.isSpectator() || player.isCreative()) {
+                ignoredPlayers++;
+            }
+        }
+
+        return !Morpheus.includeOperators ? ignoredPlayers : 0;
+    }
+
     public int getSleepingPlayers() {
         int asleepCount = 0;
 
@@ -46,5 +81,11 @@ public class WorldSleepState {
         }
 
         return asleepCount;
+    }
+
+    public void wakeAllPlayers() {
+        for (Entry<String, Boolean> entry : playerStatus.entrySet()) {
+            entry.setValue(false);
+        }
     }
 }
