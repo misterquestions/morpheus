@@ -37,8 +37,16 @@ public class WorldSleepState {
         this.playerStatus.put(username, true);
     }
 
+    public String toString() {
+        return getSleepingPlayers() + "/" + getRequiredPlayersToSleep() + " (" + getPercentSleeping() + "%)";
+    }
+
+    public int getRequiredPlayersToSleep() {
+        return Math.max(playerStatus.size() - getMiningPlayers() - getIgnoredPlayers(), 0);
+    }
+
     public int getPercentSleeping() {
-        int requiredPlayerCount = playerStatus.size() - getMiningPlayers() - getIgnoredPlayers();
+        int requiredPlayerCount = getRequiredPlayersToSleep();
 
         return (requiredPlayerCount> 0) ?
                 (this.getSleepingPlayers() > 0)
