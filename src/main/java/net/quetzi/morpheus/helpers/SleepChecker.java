@@ -60,7 +60,7 @@ public class SleepChecker {
     {
         if (Morpheus.playerSleepStatus.get(dimension).getSleepingPlayers() > 0)
         {
-            return ((dimension == 0) || (MorpheusRegistry.registry.get(dimension) != null)) && Morpheus.playerSleepStatus.get(dimension).getPercentSleeping() >= Morpheus.perc;
+            return ((dimension == 0) || (MorpheusRegistry.registry.get(dimension) != null)) && Morpheus.playerSleepStatus.get(dimension).getPercentSleeping() >= Morpheus.sleepPercentaje;
         }
         return false;
     }
