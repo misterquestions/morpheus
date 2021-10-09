@@ -68,7 +68,7 @@ public class WorldSleepState {
             }
         }
 
-        return !Morpheus.includeOperators ? ignoredPlayers : 0;
+        return Morpheus.ignoreOperators ? ignoredPlayers : 0;
     }
 
     public int getSleepingPlayers() {

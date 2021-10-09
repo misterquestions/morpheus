@@ -28,7 +28,7 @@ public class Morpheus {
     public static String onWakeText;
     public static String onMorningText;
     public static boolean includeMiners;
-    public static boolean includeOperators;
+    public static boolean ignoreOperators;
     public static int groundLevel;
     public static boolean setSpawnDaytime;
 
@@ -51,7 +51,7 @@ public class Morpheus {
         onWakeText = config.get("settings", "OnWakeText", "has left their bed.").getString();
         onMorningText = config.get("settings", "OnMorningText", "Wakey, wakey, rise and shine... Good Morning everyone!").getString();
         includeMiners = config.get("settings", "IncludeMiners", true).getBoolean();
-        includeOperators = config.get("settings", "IncludeOperators", false).getBoolean();
+        ignoreOperators = config.get("settings", "IgnoreOperators", false).getBoolean();
         groundLevel = config.getInt("settings", "GroundLevel", 64, 1, 255, "Ground Level (1-255)");
         setSpawnDaytime = config.get("settings", "AllowSetSpawnDaytime", true).getBoolean();
         config.save();
